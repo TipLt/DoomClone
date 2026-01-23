@@ -37,8 +37,6 @@ public class ItemPickUp : MonoBehaviour
             {
                 other.GetComponentInChildren<Gun>().GiveAmmo(amount, this.gameObject);
             }
-
-            
         }
     }
 }
