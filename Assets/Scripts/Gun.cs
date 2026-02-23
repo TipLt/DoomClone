@@ -32,6 +32,8 @@ public class Gun : MonoBehaviour
         gunTrigger = GetComponent<BoxCollider>();
         gunTrigger.size = new Vector3(1, verticalRange, range);
         gunTrigger.center = new Vector3(0, 0, range * 0.5f);
+
+        UICanvasManager.Instance.UpdateAmmo(ammo);
     }
 
 
@@ -95,11 +97,15 @@ public class Gun : MonoBehaviour
 
         }
 
+        
+
         //reset fire rate
         nextTimeToFire = Time.time + fireRate;
 
         //deduct 1 ammo
         ammo--;
+        Debug.Log("Ammo left: " + ammo);
+        UICanvasManager.Instance.UpdateAmmo(ammo);
 
     }
 
@@ -107,15 +113,30 @@ public class Gun : MonoBehaviour
     {
         if(ammo < maxAmmo)
         {
+            int ammoBefore = ammo;
+
             ammo += amount;
-            Destroy(pickup);
-        }
+            
+        
 
         if(ammo > maxAmmo)
         {
             ammo = maxAmmo;
         }
 
+        int actualAmmoGiven = ammo - ammoBefore;
+        Debug.Log("Picked up " + actualAmmoGiven + " ammo. Current ammo: " + ammo);
+
+
+        Destroy(pickup);
+
+        }
+        else
+        {
+            Debug.Log("Ammo full! Cannot pick up. (" + ammo + "/" + maxAmmo + ")");
+        }
+
+        UICanvasManager.Instance.UpdateAmmo(ammo);
     }
 
     private void OnTriggerEnter(Collider other)
